@@ -14,8 +14,8 @@ As part of `Deliverable ⓵ Development deployment: JWT Pizza`, start up the app
 | View profile page                                   | dinerDashboard.tsx | `[GET] /api/orders` | `SELECT id, franchiseId, storeId, date FROM dinerOrder WHERE dinerId=? LIMIT ${offset},${config.db.listPerPage}` <br/> `SELECT id, menuId, description, price FROM orderItem WHERE orderId=?` |
 | View franchise<br/>(as diner)                       | franchiseDashboard.tsx | `[GET] /api/franchise/${user.id}` | `SELECT objectId FROM userRole WHERE role='franchisee' AND userId=?` <br/> `SELECT id, name FROM franchise WHERE id in (${franchiseIds.join(',')})` <br/> `SELECT u.id, u.name, u.email FROM userRole AS ur JOIN user AS u ON u.id=ur.userId WHERE ur.objectId=? AND ur.role='franchisee'` <br/> `SELECT s.id, s.name, COALESCE(SUM(oi.price), 0) AS totalRevenue FROM dinerOrder AS do JOIN orderItem AS oi ON do.id=oi.orderId RIGHT JOIN store AS s ON s.id=do.storeId WHERE s.franchiseId=? GROUP BY s.id` |
 | Logout                                              | logout.tsx         | `[DELETE] /api/auth` | _none_    |
-| View About page                                     |                    |                   |              |
-| View History page                                   |                    |                   |              |
+| View About page                                     | about.tsx          | _none_            | _none_       |
+| View History page                                   | history.tsx        | _none_            | _none_       |
 | Login as franchisee<br/>(f@jwt.com, pw: franchisee) |                    |                   |              |
 | View franchise<br/>(as franchisee)                  |                    |                   |              |
 | Create a store                                      |                    |                   |              |
