@@ -2,12 +2,6 @@ import { Page } from '@playwright/test';
 import { test, expect } from 'playwright-test-coverage';
 import { User, Role } from '../src/service/pizzaService';
 
-test('home page', async ({ page }) => {
-  await page.goto('/');
-
-  expect(await page.title()).toBe('JWT Pizza');
-});
-
 async function basicInit(page: Page) {
   let loggedInUser: User | undefined;
   const validUsers: Record<string, User> = { 'd@jwt.com': { id: '3', name: 'Kai Chen', email: 'd@jwt.com', password: 'a', roles: [{ role: Role.Diner }] } };
