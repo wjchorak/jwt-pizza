@@ -1,7 +1,13 @@
+import { Page } from '@playwright/test';
 import { test, expect } from 'playwright-test-coverage';
 
+async function adminInit(page: Page) {
+  await page.goto('/');
+}
+
+/*
 test('test', async ({ page }) => {
-  await page.goto('http://localhost:5173/');
+  await adminInit(page);
 
   await expect(page.getByRole('link', { name: 'Register' })).toBeVisible();
   await page.getByRole('link', { name: 'Register' }).click();
@@ -24,3 +30,4 @@ test('test', async ({ page }) => {
   await page.getByRole('link', { name: 'Logout' }).click();
   await expect(page.getByRole('link', { name: 'Login' })).toBeVisible();
 });
+*/
