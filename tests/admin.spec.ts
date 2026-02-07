@@ -117,6 +117,15 @@ test('franchises', async ({ page }) => {
   await page.getByRole('textbox', { name: 'franchisee admin email' }).fill('d@jwt.com');
   await page.getByRole('button', { name: 'Create' }).click();
 
+  //admin page
+  await expect(page.getByRole('link', { name: 'admin-dashboard' })).toBeVisible();
+  await expect(page.locator('h3')).toContainText('Franchises');
+  await expect(page.getByRole('table')).toContainText('LotaPizza');
+  await expect(page.getByRole('textbox', { name: 'Filter franchises' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Submit' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Close' }).first()).toBeVisible();
+  await expect(page.getByRole('cell', { name: '« »' })).toBeVisible();
+
   //close store
   await page.getByRole('row', { name: 'Spanish Fork ₿ Close' }).getByRole('button').click();
   await expect(page.getByText('Sorry to see you go')).toBeVisible();
