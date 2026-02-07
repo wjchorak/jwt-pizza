@@ -72,10 +72,13 @@ async function adminInit(page: Page) {
 test('franchises', async ({ page }) => {
   await adminInit(page);
 
+  //login
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByRole('textbox', { name: 'Email address' }).fill('d@jwt.com');
   await page.getByRole('textbox', { name: 'Password' }).fill('a');
   await page.getByRole('button', { name: 'Login' }).click();
+
+  //add franchise
   await expect(page.getByRole('link', { name: 'Admin' })).toBeVisible();
   await page.getByRole('link', { name: 'Admin' }).click();
   await expect(page.getByRole('textbox', { name: 'Filter franchises' })).toBeVisible();
