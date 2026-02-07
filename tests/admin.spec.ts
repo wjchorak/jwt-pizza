@@ -67,6 +67,17 @@ async function adminInit(page: Page) {
     }
   });
 
+  //franchise close
+  await page.route(/\/api\/franchise\/\d+$/, async (route) => {
+    expect(route.request().method()).toBe('DELETE');
+    
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      json: { message: 'franchise deleted' },
+    });
+  });
+
   //store close
   await page.route(/\/api\/franchise\/\d+\/store\/\d+/, async (route) => {
     const request = route.request();
@@ -108,6 +119,12 @@ test('franchises', async ({ page }) => {
 
   //close store
   await page.getByRole('row', { name: 'Spanish Fork ₿ Close' }).getByRole('button').click();
+  await expect(page.getByText('Sorry to see you go')).toBeVisible();
+  await page.getByRole('button', { name: 'Close' }).click();
+  await expect(page.getByRole('heading', { name: 'Franchises' })).toBeVisible();
+
+  //close franchise
+  await page.getByRole('row', { name: 'LotaPizza Close' }).getByRole('button').click();
   await expect(page.getByText('Sorry to see you go')).toBeVisible();
   await page.getByRole('button', { name: 'Close' }).click();
   await expect(page.getByRole('heading', { name: 'Franchises' })).toBeVisible();
