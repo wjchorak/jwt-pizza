@@ -54,14 +54,11 @@ test('franchises', async ({ page }) => {
   await page.getByRole('button', { name: 'Login' }).click();
   await expect(page.getByRole('link', { name: 'Admin' })).toBeVisible();
   await page.getByRole('link', { name: 'Admin' }).click();
-
   await expect(page.getByRole('textbox', { name: 'Filter franchises' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Submit' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Add Franchise' })).toBeVisible();
   await page.getByRole('button', { name: 'Add Franchise' }).click();
-  await page.getByRole('textbox', { name: 'franchise name' }).click();
   await page.getByRole('textbox', { name: 'franchise name' }).fill('testfranchise');
-  await page.getByRole('textbox', { name: 'franchisee admin email' }).click();
   await page.getByRole('textbox', { name: 'franchisee admin email' }).fill('d@jwt.com');
   await page.getByRole('button', { name: 'Create' }).click();
 
