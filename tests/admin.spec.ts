@@ -125,6 +125,9 @@ test('franchises', async ({ page }) => {
 
   //close franchise
   await page.getByRole('row', { name: 'LotaPizza Close' }).getByRole('button').click();
+  await expect(page.getByRole('link', { name: 'close-franchise' })).toBeVisible();
+  await expect(page.getByRole('main')).toContainText('Are you sure you want to close the LotaPizza franchise? This will close all associated stores and cannot be restored. All outstanding revenue will not be refunded.');
+  await expect(page.getByRole('button', { name: 'Close' })).toBeVisible();
   await expect(page.getByText('Sorry to see you go')).toBeVisible();
   await page.getByRole('button', { name: 'Close' }).click();
   await expect(page.getByRole('heading', { name: 'Franchises' })).toBeVisible();
