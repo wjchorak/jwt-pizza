@@ -20,12 +20,9 @@ async function basicInit(page: Page) {
         user: loggedInUser,
         token: 'abcdef',
       };
-      expect(route.request().method()).toBe('PUT');
       await route.fulfill({ json: loginRes });
     }
     else if(route.request().method() == 'POST') {
-      expect(route.request().method()).toBe('POST');
-
       const registerReq = route.request().postDataJSON();
 
       const { name, email, password } = registerReq;
