@@ -8,73 +8,73 @@ async function basicInit(page: Page) {
 
   // Authorize login for the given user
   await page.route('*/**/api/auth', async (route) => {
-    const loginReq = route.request().postDataJSON();
-    const user = validUsers[loginReq.email];
-    if (!user || user.password !== loginReq.password) {
-      await route.fulfill({ status: 401, json: { error: 'Unauthorized' } });
-      return;
+    if(route.request().method() == 'PUT') {
+      const loginReq = route.request().postDataJSON();
+      const user = validUsers[loginReq.email];
+      if (!user || user.password !== loginReq.password) {
+        await route.fulfill({ status: 401, json: { error: 'Unauthorized' } });
+        return;
+      }
+      loggedInUser = validUsers[loginReq.email];
+      const loginRes = {
+        user: loggedInUser,
+        token: 'abcdef',
+      };
+      expect(route.request().method()).toBe('PUT');
+      await route.fulfill({ json: loginRes });
     }
-    loggedInUser = validUsers[loginReq.email];
-    const loginRes = {
-      user: loggedInUser,
-      token: 'abcdef',
-    };
-    expect(route.request().method()).toBe('PUT');
-    await route.fulfill({ json: loginRes });
+    else if(route.request().method() == 'POST') {
+      expect(route.request().method()).toBe('POST');
+
+      const registerReq = route.request().postDataJSON();
+
+      const { name, email, password } = registerReq;
+
+      if (!name || !email || !password) {
+        await route.fulfill({
+          status: 400,
+          json: { message: 'name, email, and password are required' },
+        });
+        return;
+      }
+
+      if (validUsers[email]) {
+        await route.fulfill({
+          status: 409,
+          json: { message: 'user already exists' },
+        });
+        return;
+      }
+
+      const newUser: User = {
+        id: String(Object.keys(validUsers).length + 1),
+        name,
+        email,
+        password,
+        roles: [{ role: Role.Diner }],
+      };
+
+      validUsers[email] = newUser;
+      loggedInUser = newUser;
+
+      const registerRes = {
+        user: {
+          id: newUser.id,
+          name: newUser.name,
+          email: newUser.email,
+          roles: newUser.roles,
+        },
+        token: 'register-token-abcdef',
+      };
+
+      await route.fulfill({ json: registerRes });
+    }
   });
 
   // Return the currently logged in user
   await page.route('*/**/api/user/me', async (route) => {
     expect(route.request().method()).toBe('GET');
     await route.fulfill({ json: loggedInUser });
-  });
-
-  // register user
-  await page.route('*/**/api/auth', async (route) => {
-    expect(route.request().method()).toBe('POST');
-
-    const registerReq = route.request().postDataJSON();
-
-    const { name, email, password } = registerReq;
-
-    if (!name || !email || !password) {
-      await route.fulfill({
-        status: 400,
-        json: { message: 'name, email, and password are required' },
-      });
-      return;
-    }
-
-    if (validUsers[email]) {
-      await route.fulfill({
-        status: 409,
-        json: { message: 'user already exists' },
-      });
-      return;
-    }
-
-    const newUser: User = {
-      id: String(Object.keys(validUsers).length + 1),
-      name,
-      email,
-      password,
-      roles: [{ role: Role.Diner }],
-    };
-
-    validUsers[email] = newUser;
-    loggedInUser = newUser;
-
-    const registerRes = {
-      user: {
-        id: newUser.id,
-        name: newUser.name,
-        email: newUser.email,
-        roles: newUser.roles,
-      },
-      token: 'register-token-abcdef',
-    };
-
-    await route.fulfill({ json: registerRes });
   });
 
   // A standard menu
