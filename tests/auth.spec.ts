@@ -188,3 +188,17 @@ test('purchase with login', async ({ page }) => {
   // Check balance
   await expect(page.getByText('0.008')).toBeVisible();
 });
+
+test('franchising page', async ({ page }) => {
+  await basicInit(page);
+
+  await page.getByLabel('Global').getByRole('link', { name: 'Franchise' }).click();
+  await expect(page.getByRole('link', { name: 'franchise-dashboard' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Login', exact: true })).toBeVisible();
+  await expect(page.getByRole('main')).toContainText('So you want a piece of the pie?');
+  await expect(page.getByText('If you are already a')).toBeVisible();
+  await expect(page.getByText('Call now')).toBeVisible();
+  await expect(page.getByRole('main')).toContainText('800-555-5555');
+  await expect(page.getByRole('main').locator('img')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Unleash Your Potential' })).toBeVisible();
+});
