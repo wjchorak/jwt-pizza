@@ -22,6 +22,7 @@ async function adminInit(page: Page) {
     await route.fulfill({ json: loginRes });
   });
 
+  //franchises
   await page.route(/\/api\/franchise(\?.*)?$/, async (route) => {
     if(route.request().method() == 'GET') {
       const franchiseRes = {
@@ -66,6 +67,22 @@ async function adminInit(page: Page) {
     }
   });
 
+  //store close
+  await page.route(/\/api\/franchise\/\d+\/store\/\d+$/, async (route) => {
+    const request = route.request();
+  
+    expect(request.method()).toBe('DELETE');
+
+    const storeDeletionResponse = { message: 'store deleted' };
+
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      json: storeDeletionResponse,
+    });
+  });
+
+
   await page.goto('/');
 }
 
@@ -89,4 +106,5 @@ test('franchises', async ({ page }) => {
   await page.getByRole('textbox', { name: 'franchisee admin email' }).fill('d@jwt.com');
   await page.getByRole('button', { name: 'Create' }).click();
 
+  //close store
 });
