@@ -68,7 +68,7 @@ async function adminInit(page: Page) {
   });
 
   //store close
-  await page.route(/\/api\/franchise\/\d+\/store\/\d+$/, async (route) => {
+  await page.route(/\/api\/franchise\/\d+\/store\/\d+/, async (route) => {
     const request = route.request();
   
     expect(request.method()).toBe('DELETE');
@@ -107,4 +107,8 @@ test('franchises', async ({ page }) => {
   await page.getByRole('button', { name: 'Create' }).click();
 
   //close store
+  await page.getByRole('row', { name: 'Spanish Fork ₿ Close' }).getByRole('button').click();
+  await expect(page.getByText('Sorry to see you go')).toBeVisible();
+  await page.getByRole('button', { name: 'Close' }).click();
+  await expect(page.getByRole('heading', { name: 'Franchises' })).toBeVisible();
 });
