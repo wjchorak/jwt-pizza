@@ -23,23 +23,47 @@ async function adminInit(page: Page) {
   });
 
   await page.route(/\/api\/franchise(\?.*)?$/, async (route) => {
-    const franchiseRes = {
-      franchises: [
-        {
-          id: 2,
-          name: 'LotaPizza',
-          stores: [
-            { id: 4, name: 'Lehi' },
-            { id: 5, name: 'Springville' },
-            { id: 6, name: 'American Fork' },
-          ],
-        },
-        { id: 3, name: 'PizzaCorp', stores: [{ id: 7, name: 'Spanish Fork' }] },
-        { id: 4, name: 'topSpot', stores: [] },
-      ],
-    };
-    expect(route.request().method()).toBe('GET');
-    await route.fulfill({ json: franchiseRes });
+    if(route.request().method() == 'GET') {
+      const franchiseRes = {
+        franchises: [
+          {
+            id: 2,
+            name: 'LotaPizza',
+            stores: [
+              { id: 4, name: 'Lehi' },
+              { id: 5, name: 'Springville' },
+              { id: 6, name: 'American Fork' },
+            ],
+          },
+          { id: 3, name: 'PizzaCorp', stores: [{ id: 7, name: 'Spanish Fork' }] },
+          { id: 4, name: 'topSpot', stores: [] },
+        ],
+      };
+      expect(route.request().method()).toBe('GET');
+      await route.fulfill({ json: franchiseRes });
+    }
+    else if(route.request().method() == 'POST') {
+      const body = route.request().postDataJSON();
+
+      expect(body).toHaveProperty('name');
+      expect(body).toHaveProperty('admins');
+
+      const franchiseRes = {
+        id: 8,
+        name: body.name,
+        admins: body.admins.map((admin: { email: any; }, index: number) => ({
+          id: index + 10,
+          email: admin.email,
+          name: 'pizza franchisee',
+        })),
+      };
+
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        json: franchiseRes,
+      });
+    }
   });
 
   await page.goto('/');
