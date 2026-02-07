@@ -140,4 +140,12 @@ test('franchises', async ({ page }) => {
   await expect(page.getByText('Sorry to see you go')).toBeVisible();
   await page.getByRole('button', { name: 'Close' }).click();
   await expect(page.getByRole('heading', { name: 'Franchises' })).toBeVisible();
+
+  //create store
+  await page.goto('/admin-dashboard/create-store');
+  await expect(page.getByRole('heading')).toContainText('Create store');
+  await expect(page.getByRole('textbox', { name: 'store name' })).toBeVisible();
+  await page.getByRole('textbox', { name: 'store name' }).click();
+  await page.getByRole('textbox', { name: 'store name' }).fill('teststore');
+  await page.getByRole('button', { name: 'Create' }).click();
 });
