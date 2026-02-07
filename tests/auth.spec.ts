@@ -187,6 +187,20 @@ test('purchase with login', async ({ page }) => {
 
   // Check balance
   await expect(page.getByText('0.008')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'delivery' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Verify' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Order more' })).toBeVisible();
+  await expect(page.getByText('order ID:')).toBeVisible();
+  await expect(page.getByText('pie count:')).toBeVisible();
+
+  //dashboard
+  await page.goto('/diner-dashboard');
+  await expect(page.getByText('Your pizza kitchen')).toBeVisible();
+  await expect(page.getByRole('img', { name: 'Employee stock photo' })).toBeVisible();
+  await expect(page.getByRole('main')).toContainText('Kai Chen');
+  await expect(page.getByRole('main')).toContainText('d@jwt.com');
+  await expect(page.getByRole('main')).toContainText('diner');
+  await expect(page.getByText('How have you lived this long')).toBeVisible();
 });
 
 test('franchising page', async ({ page }) => {
