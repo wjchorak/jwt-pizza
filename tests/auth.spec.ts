@@ -29,6 +29,54 @@ async function basicInit(page: Page) {
     await route.fulfill({ json: loggedInUser });
   });
 
+  // register user
+  await page.route('*/**/api/auth', async (route) => {
+    expect(route.request().method()).toBe('POST');
+
+    const registerReq = route.request().postDataJSON();
+
+    const { name, email, password } = registerReq;
+
+    if (!name || !email || !password) {
+      await route.fulfill({
+        status: 400,
+        json: { message: 'name, email, and password are required' },
+      });
+      return;
+    }
+
+    if (validUsers[email]) {
+      await route.fulfill({
+        status: 409,
+        json: { message: 'user already exists' },
+      });
+      return;
+    }
+
+    const newUser: User = {
+      id: String(Object.keys(validUsers).length + 1),
+      name,
+      email,
+      password,
+      roles: [{ role: Role.Diner }],
+    };
+
+    validUsers[email] = newUser;
+    loggedInUser = newUser;
+
+    const registerRes = {
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        roles: newUser.roles,
+      },
+      token: 'register-token-abcdef',
+    };
+
+    await route.fulfill({ json: registerRes });
+  });
+
   // A standard menu
   await page.route('*/**/api/order/menu', async (route) => {
     const menuRes = [
