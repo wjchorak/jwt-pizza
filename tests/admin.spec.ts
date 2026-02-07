@@ -93,6 +93,24 @@ async function adminInit(page: Page) {
     });
   });
 
+  await page.route(/\/api\/franchise\/\d+\/store$/, async (route) => {
+    expect(route.request().method()).toBe('POST');
+
+    const body = route.request().postDataJSON();
+
+    expect(body).toHaveProperty('name');
+
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      json: {
+        id: 99,
+        name: body.name,
+        totalRevenue: 0,
+      },
+    });
+  });
+
 
   await page.goto('/');
 }

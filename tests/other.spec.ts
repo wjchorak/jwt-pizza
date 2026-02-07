@@ -25,6 +25,13 @@ test('test', async ({ page }) => {
   //docs
   await page.goto('/docs');
   await expect(page.getByRole('link', { name: 'docs' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '[POST] /api/auth' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '[PUT] /api/auth' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '🔐 [DELETE] /api/auth' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '🔐 [GET] /api/user/me' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '🔐 [PUT] /api/user/:userId' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '[GET] /api/order/menu' })).toBeVisible();
+  
   await expect(page.getByRole('heading')).toContainText('JWT Pizza API');
   await expect(page.getByRole('main')).toContainText('factory: https://pizza-factory.cs329.click');
 });
