@@ -21,4 +21,10 @@ test('test', async ({ page }) => {
   await page.getByRole('link', { name: 'History' }).click();
   await expect(page.getByRole('heading')).toContainText('Mama Rucci, my my');
   await expect(page.getByRole('main').getByRole('img')).toBeVisible();
+
+  //docs
+  await page.goto('/docs');
+  await expect(page.getByRole('link', { name: 'docs' })).toBeVisible();
+  await expect(page.getByRole('heading')).toContainText('JWT Pizza API');
+  await expect(page.getByRole('main')).toContainText('factory: https://pizza-factory.cs329.click');
 });
