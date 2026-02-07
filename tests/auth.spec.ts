@@ -152,12 +152,12 @@ test('register', async ({ page }) => {
   await expect(page.getByRole('textbox', { name: 'Full name' })).toBeVisible();
   await expect(page.getByRole('textbox', { name: 'Email address' })).toBeVisible();
   await expect(page.getByRole('textbox', { name: 'Password' })).toBeVisible();
-  await page.getByRole('textbox', { name: 'Full name' }).fill('Kai Chen');
-  await page.getByRole('textbox', { name: 'Email address' }).fill('d@jwt.com');
+  await page.getByRole('textbox', { name: 'Full name' }).fill('test');
+  await page.getByRole('textbox', { name: 'Email address' }).fill('t@jwt.com');
   await page.getByRole('textbox', { name: 'Password' }).fill('a');
   await page.getByRole('button', { name: 'Register' }).click();
   await expect(page.getByRole('link', { name: 'Logout' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'K', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 't', exact: true })).toBeVisible();
 });
 
 test('purchase with login', async ({ page }) => {
