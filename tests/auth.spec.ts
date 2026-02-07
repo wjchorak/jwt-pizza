@@ -119,13 +119,41 @@ async function basicInit(page: Page) {
 
   // Order a pizza.
   await page.route('*/**/api/order', async (route) => {
-    const orderReq = route.request().postDataJSON();
-    const orderRes = {
-      order: { ...orderReq, id: 23 },
-      jwt: 'eyJpYXQ',
-    };
-    expect(route.request().method()).toBe('POST');
-    await route.fulfill({ json: orderRes });
+    if(route.request().method() == 'POST') {
+      const orderReq = route.request().postDataJSON();
+      const orderRes = {
+        order: { ...orderReq, id: 23 },
+        jwt: 'eyJpYXQ',
+      };
+      expect(route.request().method()).toBe('POST');
+      await route.fulfill({ json: orderRes });
+    }
+    else if(route.request().method() == 'GET') {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        json: {
+          dinerId: 4,
+          orders: [
+            {
+              id: 1,
+              franchiseId: 1,
+              storeId: 1,
+              date: '2024-06-05T05:14:40.000Z',
+              items: [
+                {
+                  id: 1,
+                  menuId: 1,
+                  description: 'Veggie',
+                  price: 0.05,
+                },
+              ],
+            },
+          ],
+          page: 1,
+        },
+      });
+    }
   });
 
   await page.goto('/');
@@ -200,7 +228,10 @@ test('purchase with login', async ({ page }) => {
   await expect(page.getByRole('main')).toContainText('Kai Chen');
   await expect(page.getByRole('main')).toContainText('d@jwt.com');
   await expect(page.getByRole('main')).toContainText('diner');
-  await expect(page.getByText('How have you lived this long')).toBeVisible();
+  await expect(page.getByText('Here is your history of all')).toBeVisible();
+  await expect(page.getByRole('cell', { name: '1', exact: true })).toBeVisible();
+  await expect(page.getByRole('cell', { name: '₿' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: '-06-05T05:14:40.000Z' })).toBeVisible();
 });
 
 test('franchising page', async ({ page }) => {
