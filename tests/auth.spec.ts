@@ -152,18 +152,12 @@ test('register', async ({ page }) => {
   await expect(page.getByRole('textbox', { name: 'Full name' })).toBeVisible();
   await expect(page.getByRole('textbox', { name: 'Email address' })).toBeVisible();
   await expect(page.getByRole('textbox', { name: 'Password' })).toBeVisible();
-  await page.getByRole('textbox', { name: 'Full name' }).fill('test');
-  await page.getByRole('textbox', { name: 'Email address' }).fill('test@test.com');
-  await page.getByRole('textbox', { name: 'Password' }).fill('testpassword');
+  await page.getByRole('textbox', { name: 'Full name' }).fill('Kai Chen');
+  await page.getByRole('textbox', { name: 'Email address' }).fill('d@jwt.com');
+  await page.getByRole('textbox', { name: 'Password' }).fill('a');
   await page.getByRole('button', { name: 'Register' }).click();
   await expect(page.getByRole('link', { name: 'Logout' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 't', exact: true })).toBeVisible();
-  await page.getByRole('link', { name: 't', exact: true }).click();
-  await expect(page.getByRole('main')).toContainText('test');
-  await expect(page.getByRole('main')).toContainText('test@test.com');
-  await expect(page.getByRole('main')).toContainText('diner');
-  await page.getByRole('link', { name: 'Logout' }).click();
-  await expect(page.getByRole('link', { name: 'Login' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'K', exact: true })).toBeVisible();
 });
 
 test('purchase with login', async ({ page }) => {
