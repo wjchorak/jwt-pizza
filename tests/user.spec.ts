@@ -2,6 +2,56 @@ import { test, expect } from 'playwright-test-coverage';
 
 test('updateUser', async ({ page }) => {
   const email = `user${Math.floor(Math.random() * 10000)}@jwt.com`;
+
+  let currentUser = {
+    id: 1,
+    name: 'pizza diner',
+    email,
+  };
+
+  const token = 'mock-token';
+
+  await page.route('**/api/auth', async (route, request) => {
+    if (request.method() === 'POST') {
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          user: currentUser,
+          token,
+        }),
+      });
+    }
+  });
+
+  await page.route('**/api/user/*', async (route, request) => {
+    if (request.method() === 'PUT') {
+      const body = JSON.parse(request.postData() || '{}');
+
+      currentUser = {
+        ...currentUser,
+        ...body,
+      };
+
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          user: currentUser,
+          token,
+        }),
+      });
+    }
+  });
+
+  await page.route('**/api/user/me', async (route) => {
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(currentUser),
+    });
+  });
+
   await page.goto('/');
   await page.getByRole('link', { name: 'Register' }).click();
   await page.getByRole('textbox', { name: 'Full name' }).fill('pizza diner');
