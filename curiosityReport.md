@@ -8,9 +8,9 @@ So far in CS 329, we have mostly discussed methods of testing that assert the co
 
 ### What is fuzzing?
 
-Fuzzing (or fuzz testing) is an automated testing technique that uses inputs generated randomly by a program called a fuzzer to test for exceptions. Generally, a fuzzer will generate inputs that are close to correct, either from scratch or by mutating a seed input. The goal is to have inputs that aren't outright rejected by the parser while also causing issues deeper in the program. Fuzzing is most effective in areas where input is provided directly and with low trust (i.e. a user uploads a file).^1^
+Fuzzing (or fuzz testing) is an automated testing technique that uses inputs generated randomly by a program called a fuzzer to test for exceptions. Generally, a fuzzer will generate inputs that are close to correct, either from scratch or by mutating a seed input. The goal is to have inputs that aren't outright rejected by the parser while also causing issues deeper in the program. Fuzzing is most effective in areas where input is provided directly and with low trust (i.e. a user uploads a file).
 
-Fuzzing can help to expose a variety of issues, including crashes, memory leaks, and buffer overflow.^2^
+Fuzzing can help to expose a variety of issues, including crashes, memory leaks, and buffer overflow.
 
 ## Sources
 
