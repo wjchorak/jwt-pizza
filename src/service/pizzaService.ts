@@ -105,7 +105,7 @@ interface PizzaService {
   logout(): void;
   getUser(): Promise<User | null>;
   updateUser(user: User): Promise<User>;
-  deleteUser(userId: number): Promise<string>;
+  deleteUser(userId: string): Promise<string>;
   listUsers(page?: number, limit?: number, nameFilter?: string): Promise<UserList>;
   getMenu(): Promise<Menu>;
   getOrders(user: User): Promise<OrderHistory>;

@@ -44,6 +44,10 @@ export default function AdminDashboard(props: Props) {
     navigate('/admin-dashboard/close-store', { state: { franchise: franchise, store: store } });
   }
 
+  async function deleteUser(user: User) {
+    await pizzaService.deleteUser(user.id!);
+  }
+
   async function filterFranchises() {
     setFranchiseList(await pizzaService.getFranchises(franchisePage, 10, `*${filterFranchiseRef.current?.value}*`));
   }
@@ -81,6 +85,12 @@ export default function AdminDashboard(props: Props) {
                               <td className="text-start px-2 whitespace-nowrap text-l font-mono text-orange-600">{user.name}</td>
                               <td className="text-start px-2 whitespace-nowrap text-sm font-normal text-gray-800">{user.email}</td>
                               <td className="text-start px-2 whitespace-nowrap text-sm font-normal text-gray-800">{user.roles && user.roles.length > 0 ? user.roles[0].role : '—'}</td>
+                              <td className="px-6 py-1 whitespace-nowrap text-end text-sm font-medium">
+                                <button type="button" className="px-2 py-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-1 border-orange-400 text-orange-400  hover:border-orange-800 hover:text-orange-800" onClick={() => deleteUser(user)}>
+                                  <TrashIcon />
+                                  Delete
+                                </button>
+                              </td>
                             </tr>
                           </tbody>
                         );
