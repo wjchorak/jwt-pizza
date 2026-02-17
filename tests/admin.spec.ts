@@ -92,6 +92,14 @@ test.describe('admin dashboard users', () => {
 
     await expect(page.getByRole('button', { name: '»' }).first()).toBeVisible();
     await expect(page.getByRole('button', { name: '«' }).first()).toBeVisible();
+
+    await page.getByRole('button', { name: '»' }).first().click();
+    await expect(page.getByRole('table').first()).toContainText('pizza diner3');
+    await expect(page.getByRole('table').first()).toContainText('pizza diner4');
+    await expect(page.getByRole('table').first()).toContainText('pizza diner5');
+
+    await page.getByRole('button', { name: '«' }).first().click();
+    await expect(page.getByRole('table').first()).toContainText('pizza diner1');
   });
 
   test('admin can delete a user', async ({ page }) => {
