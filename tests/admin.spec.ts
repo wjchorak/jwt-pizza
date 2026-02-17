@@ -72,16 +72,33 @@ test.describe('admin dashboard users', () => {
     await page.getByRole('link', { name: 'Admin' }).click();
 
     await expect(page.getByRole('main')).toContainText('Users');
-    await expect(page.getByRole('main')).toContainText('pizza diner1');
-    await expect(page.getByRole('main')).toContainText('admin user');
-    await expect(page.getByRole('main')).toContainText('pizza diner2');
-    await expect(page.getByRole('main')).toContainText('diner@test.com');
-    await expect(page.getByRole('main')).toContainText('diner');
+    await expect(page.getByRole('table').first()).toContainText('pizza diner1');
+    await expect(page.getByRole('table').first()).toContainText('admin user');
+    await expect(page.getByRole('table').first()).toContainText('pizza diner2');
+    await expect(page.getByRole('table').first()).toContainText('diner@test.com');
+    await expect(page.getByRole('table').first()).toContainText('diner');
 
     await expect(page.getByRole('button', { name: '»' }).first()).toBeVisible();
     await expect(page.getByRole('button', { name: '«' }).first()).toBeVisible();
-
   });
 
-  //test: delete users
+  test('admin can delete a user', async ({ page }) => {
+    await page.getByRole('link', { name: 'Login' }).click();
+    await page.getByRole('textbox', { name: 'Email address' }).fill('admin@jwt.com');
+    await page.getByRole('textbox', { name: 'Password' }).fill('admin');
+    await page.getByRole('button', { name: 'Login' }).click();
+
+    await page.getByRole('link', { name: 'Admin' }).click();
+
+    await expect(page.getByRole('table').first()).toContainText('pizza diner1');
+
+    await page
+      .getByRole('row', { name: /pizza diner1/i })
+      .getByRole('button')
+      .click();
+
+    await page.getByRole('button', { name: 'Delete' }).first().click();
+
+    await expect(page.getByRole('table')).not.toContainText('pizza diner1');
+  });
 });
