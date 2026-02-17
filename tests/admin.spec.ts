@@ -31,15 +31,30 @@ test.describe('admin dashboard users', () => {
       }
     });
 
-    await page.route('**/api/user?*', async (route) => {
+    await page.route('**/api/user?*', async (route, request) => {
+      const url = new URL(request.url());
+      const pageParam = Number(url.searchParams.get('page') || 0);
+      const limitParam = Number(url.searchParams.get('limit') || 10);
+
+      const offset = pageParam * limitParam;
+
+      let paginatedUsers = users.slice(offset, offset + limitParam + 1);
+
+      const more = paginatedUsers.length > limitParam;
+      if (more) {
+        paginatedUsers = paginatedUsers.slice(0, limitParam);
+      }
+
       return route.fulfill({
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify({
-          users,
+          users: paginatedUsers,
+          more,
         }),
       });
     });
+
 
     await page.goto('/');
   });
