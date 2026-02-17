@@ -46,6 +46,9 @@ export default function AdminDashboard(props: Props) {
 
   async function deleteUser(user: User) {
     await pizzaService.deleteUser(user.id!);
+
+    const updatedUserList = await pizzaService.listUsers(userPage, 3, `*${filterUserRef.current?.value || '*' }*`);
+    setUserList(updatedUserList);
   }
 
   async function filterFranchises() {

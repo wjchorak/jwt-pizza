@@ -58,6 +58,18 @@ test.describe('admin dashboard users', () => {
       });
     });
 
+    await page.route('**/api/user/*', async (route, request) => {
+      if (request.method() === 'DELETE') {
+        const id = Number(request.url().split('/').pop());
+        users = users.filter((u) => u.id !== id);
+
+        return route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ message: 'user deleted' }),
+        });
+      }
+    });
 
     await page.goto('/');
   });
@@ -97,8 +109,6 @@ test.describe('admin dashboard users', () => {
       .getByRole('button')
       .click();
 
-    await page.getByRole('button', { name: 'Delete' }).first().click();
-
-    await expect(page.getByRole('table')).not.toContainText('pizza diner1');
+    await expect(page.getByRole('table').first()).not.toContainText('pizza diner1');
   });
 });
