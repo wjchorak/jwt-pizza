@@ -125,10 +125,11 @@ test('franchises', async ({ page }) => {
   await page.getByRole('button', { name: 'Login' }).click();
 
   //add franchise
+  const franchisesSection = page.getByRole('heading', { name: 'Franchises' }).locator('..');
   await expect(page.getByRole('link', { name: 'Admin' })).toBeVisible();
   await page.getByRole('link', { name: 'Admin' }).click();
-  await expect(page.getByRole('textbox', { name: 'Filter franchises' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Submit' })).toBeVisible();
+  await expect(franchisesSection.getByRole('textbox', { name: 'Filter franchises' })).toBeVisible();
+  await expect(franchisesSection.getByRole('button', { name: 'Submit' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Add Franchise' })).toBeVisible();
   await page.getByRole('button', { name: 'Add Franchise' }).click();
   await page.getByRole('textbox', { name: 'franchise name' }).fill('testfranchise');
@@ -137,29 +138,34 @@ test('franchises', async ({ page }) => {
 
   //admin page
   await expect(page.getByRole('link', { name: 'admin-dashboard' })).toBeVisible();
-  await expect(page.locator('h3')).toContainText('Franchises');
-  await expect(page.getByRole('table')).toContainText('LotaPizza');
-  await expect(page.getByRole('textbox', { name: 'Filter franchises' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Submit' })).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'Close' }).first()).toBeVisible();
-  await expect(page.getByRole('cell', { name: '« »' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Franchises' })).toBeVisible();
+  await expect(franchisesSection.getByRole('table')).toContainText('LotaPizza');
+  await expect(franchisesSection.getByRole('textbox', { name: 'Filter franchises' })).toBeVisible();
+  await expect(franchisesSection.getByRole('button', { name: 'Submit' })).toBeVisible();
+  const firstCloseCell = franchisesSection.getByRole('cell', { name: 'Close' }).first();
+  await expect(firstCloseCell).toBeVisible();
+  await expect(franchisesSection.getByRole('cell', { name: '« »' })).toBeVisible();
 
   //close store
-  await page.getByRole('row', { name: 'Spanish Fork ₿ Close' }).getByRole('button').click();
+  const spanishForkRow = franchisesSection.getByRole('row', { name: /Spanish Fork/ });
+  await spanishForkRow.getByRole('button', { name: 'Close' }).click();
   await expect(page.getByText('Sorry to see you go')).toBeVisible();
   await page.getByRole('button', { name: 'Close' }).click();
   await expect(page.getByRole('heading', { name: 'Franchises' })).toBeVisible();
 
   //close franchise
-  await page.getByRole('row', { name: 'LotaPizza Close' }).getByRole('button').click();
+  const lotaPizzaRow = franchisesSection.getByRole('row', { name: /LotaPizza/ });
+  await lotaPizzaRow.getByRole('button', { name: 'Close' }).click();
   await expect(page.getByRole('link', { name: 'close-franchise' })).toBeVisible();
-  await expect(page.getByRole('main')).toContainText('Are you sure you want to close the LotaPizza franchise? This will close all associated stores and cannot be restored. All outstanding revenue will not be refunded.');
+  await expect(page.getByRole('main')).toContainText(
+    'Are you sure you want to close the LotaPizza franchise? This will close all associated stores and cannot be restored. All outstanding revenue will not be refunded.'
+  );
   await expect(page.getByRole('button', { name: 'Close' })).toBeVisible();
   await expect(page.getByText('Sorry to see you go')).toBeVisible();
   await page.getByRole('button', { name: 'Close' }).click();
   await expect(page.getByRole('heading', { name: 'Franchises' })).toBeVisible();
 
-  //create store
+  // create store
   await page.goto('/admin-dashboard/create-store');
   await expect(page.getByRole('heading')).toContainText('Create store');
   await expect(page.getByRole('textbox', { name: 'store name' })).toBeVisible();
