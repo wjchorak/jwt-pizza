@@ -11,6 +11,14 @@ test.describe('admin dashboard users', () => {
       { id: 1, name: 'pizza diner1', email: 'diner@test.com', roles: [{ role: 'diner' }] },
       { id: 2, name: 'admin user', email: 'admin@test.com', roles: [{ role: 'admin' }] },
       { id: 3, name: 'pizza diner2', email: 'diner2@test.com', roles: [{ role: 'diner' }] },
+      { id: 4, name: 'pizza diner3', email: 'diner3@test.com', roles: [{ role: 'diner' }] },
+      { id: 5, name: 'pizza diner4', email: 'diner4@test.com', roles: [{ role: 'diner' }] },
+      { id: 6, name: 'pizza diner5', email: 'diner5@test.com', roles: [{ role: 'diner' }] },
+      { id: 7, name: 'pizza diner6', email: 'diner6@test.com', roles: [{ role: 'diner' }] },
+      { id: 8, name: 'pizza diner7', email: 'diner7@test.com', roles: [{ role: 'diner' }] },
+      { id: 9, name: 'pizza diner8', email: 'diner8@test.com', roles: [{ role: 'diner' }] },
+      { id: 10, name: 'pizza diner9', email: 'diner9@test.com', roles: [{ role: 'diner' }] },
+      { id: 11, name: 'pizza diner10', email: 'diner10@test.com', roles: [{ role: 'diner' }] },
     ];
 
     await page.route('**/api/auth', async (route, request) => {
@@ -31,27 +39,22 @@ test.describe('admin dashboard users', () => {
       }
     });
 
-    await page.route('**/api/user?*', async (route, request) => {
+    await page.route('**/api/user*', async (route, request) => {
       const url = new URL(request.url());
       const pageParam = Number(url.searchParams.get('page') || 0);
-      const limitParam = Number(url.searchParams.get('limit') || 10);
+      const limitParam = Number(url.searchParams.get('limit') || 3);
+      const nameFilter = url.searchParams.get('name')?.replace(/\*/g, '').toLowerCase() || '';
 
-      const offset = pageParam * limitParam;
+      let filtered = users.filter((u) => u.name.toLowerCase().includes(nameFilter));
+      let offset = pageParam * limitParam;
+      let paginated = filtered.slice(offset, offset + limitParam + 1);
+      const more = paginated.length > limitParam;
+      if (more) paginated = paginated.slice(0, limitParam);
 
-      let paginatedUsers = users.slice(offset, offset + limitParam + 1);
-
-      const more = paginatedUsers.length > limitParam;
-      if (more) {
-        paginatedUsers = paginatedUsers.slice(0, limitParam);
-      }
-
-      return route.fulfill({
+      await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify({
-          users: paginatedUsers,
-          more,
-        }),
+        body: JSON.stringify({ users: paginated, more }),
       });
     });
 
@@ -68,10 +71,16 @@ test.describe('admin dashboard users', () => {
     await expect(page.getByRole('link', { name: 'Admin' })).toBeVisible();
     await page.getByRole('link', { name: 'Admin' }).click();
 
-    await expect(page.getByRole('heading')).toContainText('Users');
-    await expect(page.getByRole('table')).toContainText('pizza diner');
-    await expect(page.getByRole('table')).toContainText('admin user');
-    await expect(page.getByRole('table')).toContainText('franchisee user');
+    await expect(page.getByRole('main')).toContainText('Users');
+    await expect(page.getByRole('main')).toContainText('pizza diner1');
+    await expect(page.getByRole('main')).toContainText('admin user');
+    await expect(page.getByRole('main')).toContainText('pizza diner2');
+    await expect(page.getByRole('main')).toContainText('diner@test.com');
+    await expect(page.getByRole('main')).toContainText('diner');
+
+    await expect(page.getByRole('button', { name: '»' }).first()).toBeVisible();
+    await expect(page.getByRole('button', { name: '«' }).first()).toBeVisible();
+
   });
 
   //test: delete users
