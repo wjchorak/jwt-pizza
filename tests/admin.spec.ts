@@ -31,10 +31,33 @@ test.describe('admin dashboard users', () => {
       }
     });
 
+    await page.route('**/api/user?*', async (route) => {
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          users,
+        }),
+      });
+    });
+
     await page.goto('/');
   });
 
-  //test: view users
+  test('admin can view paginated users', async ({ page }) => {
+    await page.getByRole('link', { name: 'Login' }).click();
+    await page.getByRole('textbox', { name: 'Email address' }).fill('admin@jwt.com');
+    await page.getByRole('textbox', { name: 'Password' }).fill('admin');
+    await page.getByRole('button', { name: 'Login' }).click();
+
+    await expect(page.getByRole('link', { name: 'Admin' })).toBeVisible();
+    await page.getByRole('link', { name: 'Admin' }).click();
+
+    await expect(page.getByRole('heading')).toContainText('Users');
+    await expect(page.getByRole('table')).toContainText('pizza diner');
+    await expect(page.getByRole('table')).toContainText('admin user');
+    await expect(page.getByRole('table')).toContainText('franchisee user');
+  });
 
   //test: delete users
 });
