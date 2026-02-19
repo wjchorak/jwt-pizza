@@ -12,6 +12,18 @@ Fuzzing (or fuzz testing) is an automated testing technique that uses inputs gen
 
 Fuzzing can help to expose a variety of issues, including crashes, memory leaks, and buffer overflow.
 
+### How does fuzzing work?
+
+### Why is fuzzing useful?
+
+## 2. Concolic Testing
+
+### What is concolic testing?
+
+### How does concolic testing work?
+
+### Why is concolic testing useful?
+
 ## Sources
 
 1. [Wikipedia entry for Fuzzing](https://en.wikipedia.org/wiki/Fuzzing#)
