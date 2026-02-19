@@ -14,6 +14,16 @@ Fuzzing can help to expose a variety of issues, including crashes, memory leaks,
 
 ### How does fuzzing work?
 
+Per Wikipedia:
+
+> A fuzzer can be categorized in several ways:
+>
+> 1. A fuzzer can be generation-based or mutation-based depending on whether inputs are generated from scratch or by modifying existing inputs.
+> 2. A fuzzer can be dumb (unstructured) or smart (structured) depending on whether it is aware of input structure.
+> 3. A fuzzer can be white-, grey-, or black-box, depending on whether it is aware of program structure.
+
+Generally, a fuzzer will generate inputs for the program (whether from scratch or mutation) and then observe whether the inputs provoke an appropriate output. Typically, the fuzzer itself does not have the capability to identify complex issues (anything other than crashes). If a further degree of sensitivity is needed for testing (it often is), a sanitizer program can be used to cause the program to crash when issues are detected (memory issues, undefined behavior, race conditions, etc.).
+
 ### Why is fuzzing useful?
 
 ## 2. Concolic Testing
