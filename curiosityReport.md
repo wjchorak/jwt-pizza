@@ -26,6 +26,8 @@ Generally, a fuzzer will generate inputs for the program (whether from scratch o
 
 ### Why is fuzzing useful?
 
+The primary value of fuzzing is that it provides a form of non-deterministic testing (where the intended output of the test is not known) in contrast to most traditional testing being deterministic (correct output is known). This is vital for exposing issues that may not be obvious or expected to a human observer of the code. Fuzzing can be applied at any stage of the development process, even if the inteded functionality is still incomplete (if your code can run at all, it can be fuzzed).
+
 ## 2. Concolic Testing
 
 ### What is concolic testing?
@@ -38,3 +40,5 @@ Generally, a fuzzer will generate inputs for the program (whether from scratch o
 
 1. [Wikipedia entry for Fuzzing](https://en.wikipedia.org/wiki/Fuzzing#)
 2. [Google's OSS-Fuzz](https://github.com/google/oss-fuzz)
+3. [Microsoft Fuzzing](https://www.microsoft.com/en-us/research/blog/a-brief-introduction-to-fuzzing-and-why-its-an-important-tool-for-developers/)
+4. [This Code Intelligence blog post lists industry standards for fuzzing](https://www.code-intelligence.com/blog/top-5-reasons-to-fuzz-embedded-systems)
