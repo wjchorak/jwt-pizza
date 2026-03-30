@@ -53,6 +53,10 @@ Generally, concolic testing follows a set algorithm to identify these bad paths.
 
 As with fuzzing, the sorts of bugs that concolic testing can locate are very difficult for a human to identify. Most of the time, the sorts of inputs that a human will think of using to test a program are informed by our human experience of the world. By focusing less on the input/output and more on verifying all branching logic paths, we can find sneaky vulnerabilities and make the program more secure.
 
+## Takeaway
+
+I think the important thing I found in doing this research was that it is important to take a variety of concurrent testing approaches. While the standard unit/regression/E2E testing can help verify that the program is functioning correctly, relying only on these human-intuitive forms of testing would cause us to miss major vulnerabilities that are present in our code. I also find concolic testing to be particularly interesting in how it takes a more abstract/theoretical concept in CS (symbolic execution/symbolic computation) and apply it in a very practical way.
+
 ## Sources
 
 1. [Wikipedia entry for Fuzzing](https://en.wikipedia.org/wiki/Fuzzing#)
