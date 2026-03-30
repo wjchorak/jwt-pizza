@@ -38,6 +38,17 @@ Concolic testing is a testing technique that utilizes some interesting theoretic
 
 The name "concolic testing" comes from a portmanteau of "concrete" execution and "symbolic" execution. A concolic testing algorithm executes a program symbolically, following the variables without focusing on their specific values. The algorithm identifies path conditions and adjusts inputs before running again. In theory, this allows the algorithm to check all branching execution paths and find the ones that have bugs.
 
+Generally, concolic testing follows a set algorithm to identify these bad paths. As with the fuzzing example above, Wikipedia explains it better than I can:
+
+> 1. Classify a particular set of variables as input variables. These variables will be treated as symbolic variables during symbolic execution. All other variables will be treated as concrete values.
+> 2. Instrument the program so that each operation which may affect a symbolic variable value or a path condition is logged to a trace file, as well as any error that occurs.
+> 3. Choose an arbitrary input to begin with.
+> 4. Execute the program.
+> 5. Symbolically re-execute the program on the trace, generating a set of symbolic constraints (including path conditions).
+> 6. Negate the last path condition not already negated in order to visit a new execution path. If there is no such path condition, the algorithm terminates.
+> 7. Invoke an automated satisfiability solver on the new set of path conditions to generate a new input. If there is no input satisfying the constraints, return to step 6 to try the next execution path.
+> 8. Return to step 4.
+
 ### Why is concolic testing useful?
 
 As with fuzzing, the sorts of bugs that concolic testing can locate are very difficult for a human to identify. Most of the time, the sorts of inputs that a human will think of using to test a program are informed by our human experience of the world. By focusing less on the input/output and more on verifying all branching logic paths, we can find sneaky vulnerabilities and make the program more secure.
