@@ -32,9 +32,15 @@ The primary value of fuzzing is that it provides a form of non-deterministic tes
 
 ### What is concolic testing?
 
+Concolic testing is a testing technique that utilizes some interesting theoretical CS ideas to find bugs in software. Similar to fuzzing, concolic testing is non-deterministic and is focused on finding bugs and security vulnerabilites rather than verifying correct input.
+
 ### How does concolic testing work?
 
+The name "concolic testing" comes from a portmanteau of "concrete" execution and "symbolic" execution. A concolic testing algorithm executes a program symbolically, following the variables without focusing on their specific values. The algorithm identifies path conditions and adjusts inputs before running again. In theory, this allows the algorithm to check all branching execution paths and find the ones that have bugs.
+
 ### Why is concolic testing useful?
+
+As with fuzzing, the sorts of bugs that concolic testing can locate are very difficult for a human to identify. Most of the time, the sorts of inputs that a human will think of using to test a program are informed by our human experience of the world. By focusing less on the input/output and more on verifying all branching logic paths, we can find sneaky vulnerabilities and make the program more secure.
 
 ## Sources
 
@@ -42,3 +48,6 @@ The primary value of fuzzing is that it provides a form of non-deterministic tes
 2. [Google's OSS-Fuzz](https://github.com/google/oss-fuzz)
 3. [Microsoft Fuzzing](https://www.microsoft.com/en-us/research/blog/a-brief-introduction-to-fuzzing-and-why-its-an-important-tool-for-developers/)
 4. [This Code Intelligence blog post lists industry standards for fuzzing](https://www.code-intelligence.com/blog/top-5-reasons-to-fuzz-embedded-systems)
+5. [Wikipedia entry for Concolic Testing](https://en.wikipedia.org/wiki/Concolic_testing)
+6. [ACM Proceedings on Concolic Testing](https://dl.acm.org/doi/10.1145/1321631.1321746)
+7. [An implementation of Concolic Fuzzing in Python](https://www.fuzzingbook.org/html/ConcolicFuzzer.html)
